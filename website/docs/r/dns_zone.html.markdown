@@ -15,7 +15,7 @@ Enables you to manage DNS zones within Azure DNS. These zones are hosted on Azur
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "acceptanceTestResourceGroup1"
-  location = "West US"
+  location = "West Europe"
 }
 
 resource "azurerm_dns_zone" "example-public" {

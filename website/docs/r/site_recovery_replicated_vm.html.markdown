@@ -15,12 +15,12 @@ Manages a VM replicated using Azure Site Recovery (Azure to Azure only). A repli
 ```hcl
 resource "azurerm_resource_group" "primary" {
   name     = "tfex-replicated-vm-primary"
-  location = "West US"
+  location = "West Europe"
 }
 
 resource "azurerm_resource_group" "secondary" {
   name     = "tfex-replicated-vm-secondary"
-  location = "East US"
+  location = "West Europe"
 }
 
 resource "azurerm_virtual_machine" "vm" {

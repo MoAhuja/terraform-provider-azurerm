@@ -15,12 +15,12 @@ Manages a Azure Site Recovery Replication Fabric within a Recovery Services vaul
 ```hcl
 resource "azurerm_resource_group" "primary" {
   name     = "tfex-network-mapping-primary"
-  location = "West US"
+  location = "West Europe"
 }
 
 resource "azurerm_resource_group" "secondary" {
   name     = "tfex-network-mapping-secondary"
-  location = "East US"
+  location = "West Europe"
 }
 
 resource "azurerm_recovery_services_vault" "vault" {

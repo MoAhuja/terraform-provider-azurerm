@@ -17,7 +17,7 @@ data "azurerm_client_config" "current" {}
 
 resource "azurerm_resource_group" "example" {
   name     = "acceptanceTestResourceGroup1"
-  location = "West US"
+  location = "West Europe"
 }
 
 resource "azurerm_sql_server" "example" {

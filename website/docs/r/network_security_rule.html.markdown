@@ -20,7 +20,7 @@ At this time you cannot use a Network Security Group with in-line Network Securi
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "acceptanceTestResourceGroup1"
-  location = "West US"
+  location = "West Europe"
 }
 
 resource "azurerm_network_security_group" "example" {

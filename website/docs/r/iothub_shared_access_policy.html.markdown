@@ -15,7 +15,7 @@ Manages an IotHub Shared Access Policy
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "resourceGroup1"
-  location = "West US"
+  location = "West Europe"
 }
 
 resource "azurerm_iothub" "example" {

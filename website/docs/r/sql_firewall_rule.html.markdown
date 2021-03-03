@@ -15,7 +15,7 @@ Allows you to manage an Azure SQL Firewall Rule
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "acceptanceTestResourceGroup1"
-  location = "West US"
+  location = "West Europe"
 }
 
 resource "azurerm_sql_server" "example" {

@@ -20,7 +20,7 @@ and an on-premises VPN device and network.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "test"
-  location = "West US"
+  location = "West Europe"
 }
 
 resource "azurerm_virtual_network" "example" {
@@ -92,7 +92,7 @@ in different locations/regions.
 ```hcl
 resource "azurerm_resource_group" "us" {
   name     = "us"
-  location = "East US"
+  location = "West Europe"
 }
 
 resource "azurerm_virtual_network" "us" {

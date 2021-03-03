@@ -18,7 +18,7 @@ Manages a Security Alert Policy for a MSSQL Server.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "acceptanceTestResourceGroup1"
-  location = "West US"
+  location = "West Europe"
 }
 
 resource "azurerm_sql_server" "example" {

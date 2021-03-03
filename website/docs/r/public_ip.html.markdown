@@ -15,7 +15,7 @@ Manages a Public IP Address.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "resourceGroup1"
-  location = "West US"
+  location = "West Europe"
 }
 
 resource "azurerm_public_ip" "example" {

@@ -15,7 +15,7 @@ Manages a Redis Linked Server (ie Geo Location)
 ```hcl
 resource "azurerm_resource_group" "example-primary" {
   name     = "example-resources-primary"
-  location = "East US"
+  location = "West Europe"
 }
 
 resource "azurerm_redis_cache" "example-primary" {
@@ -36,7 +36,7 @@ resource "azurerm_redis_cache" "example-primary" {
 
 resource "azurerm_resource_group" "example-secondary" {
   name     = "example-resources-secondary"
-  location = "West US"
+  location = "West Europe"
 }
 
 resource "azurerm_redis_cache" "example-secondary" {

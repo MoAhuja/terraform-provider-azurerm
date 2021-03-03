@@ -15,7 +15,7 @@ Manages a Azure Site Recovery replication policy within a recovery vault. Replic
 ```hcl
 resource "azurerm_resource_group" "secondary" {
   name     = "tfex-network-mapping-secondary"
-  location = "East US"
+  location = "West Europe"
 }
 
 resource "azurerm_recovery_services_vault" "vault" {

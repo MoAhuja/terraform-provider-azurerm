@@ -15,7 +15,7 @@ Manages a Event Hubs Consumer Group as a nested resource within an Event Hub.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "resourceGroup1"
-  location = "West US"
+  location = "West Europe"
 }
 
 resource "azurerm_eventhub_namespace" "example" {
