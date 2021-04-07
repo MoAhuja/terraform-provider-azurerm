@@ -17,38 +17,40 @@ import (
 
 func dataSourceStorageDataLakeGen2Path() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceStorageAccountSasRead,
+		Read: dataStorageDataLakeGen2PathRead,
 
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(5 * time.Minute),
 		},
 
 		Schema: map[string]*schema.Schema{
-
-			// "storage_account_id": {
-			// 	Type:         schema.TypeString,
-			// 	Required:     true,
-			// 	ValidateFunc: validate.StorageAccountID,
-			// },
-
-			// "filesystem_name": {
-			// 	Type:         schema.TypeString,
-			// 	Required:     true,
-			// 	ValidateFunc: validateStorageDataLakeGen2FileSystemName,
-			// },
-
-			// "path": {
-			// 	Type:     schema.TypeString,
-			// 	Required: true,
-			// },
 			"id": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"storage_account_id": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validate.StorageAccountID,
+			},
+
+			"filesystem_name": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validateStorageDataLakeGen2FileSystemName,
+			},
+
+			"path": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
 
 			"resource": {
 				Type:         schema.TypeString,
-				Required:     true,
+				Optional:     true,
 				Computed:     true,
 				ValidateFunc: validation.StringInSlice([]string{"directory"}, false),
 			},
@@ -78,11 +80,10 @@ func dataSourceStorageDataLakeGen2Path() *schema.Resource {
 							Optional:     true,
 							Computed:     true,
 							ValidateFunc: validation.StringInSlice([]string{"default", "access"}, false),
-							Default:      "access",
 						},
 						"type": {
 							Type:         schema.TypeString,
-							Required:     true,
+							Optional:     true,
 							Computed:     true,
 							ValidateFunc: validation.StringInSlice([]string{"user", "group", "mask", "other"}, false),
 						},
@@ -94,7 +95,7 @@ func dataSourceStorageDataLakeGen2Path() *schema.Resource {
 						},
 						"permissions": {
 							Type:         schema.TypeString,
-							Required:     true,
+							Optional:     true,
 							Computed:     true,
 							ValidateFunc: validate.ADLSAccessControlPermissions,
 						},
@@ -115,6 +116,10 @@ func dataStorageDataLakeGen2PathRead(d *schema.ResourceData, meta interface{}) e
 		return err
 	}
 
+	log.Printf("[INFO] Id Path is: %s", id.Path)
+	log.Printf("[INFO] Id Filesystem is: %s", id.FileSystemName)
+	log.Printf("[INFO] Id Account Name is: %s", id.AccountName)
+
 	resp, err := client.GetProperties(ctx, id.AccountName, id.FileSystemName, id.Path, paths.GetPropertiesActionGetStatus)
 	if err != nil {
 		if utils.ResponseWasNotFound(resp.Response) {
@@ -126,10 +131,16 @@ func dataStorageDataLakeGen2PathRead(d *schema.ResourceData, meta interface{}) e
 		return fmt.Errorf("Error retrieving Path %q in File System %q in Storage Account %q: %+v", id.Path, id.FileSystemName, id.AccountName, err)
 	}
 
+	d.SetId(d.Get("id").(string))
 	d.Set("path", id.Path)
+	d.Set("filesystem_name", id.FileSystemName)
+	d.Set("storage_account_id", id.AccountName)
 	d.Set("resource", resp.ResourceType)
 	d.Set("owner", resp.Owner)
 	d.Set("group", resp.Group)
+
+	log.Printf("[INFO] Owner is: %s", resp.Owner)
+	log.Printf("[INFO] Group is: %s", resp.Group)
 
 	// The above `getStatus` API request doesn't return the ACLs
 	// Have to make a `getAccessControl` request, but that doesn't return all fields either!
