@@ -28,6 +28,12 @@ func dataSourceStorageDataLakeGen2Path() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"ace_scope_filter": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Default:      "all",
+				ValidateFunc: validation.StringInSlice([]string{"all", "default", "access"}, false),
+			},
 			"storage_account_id": {
 				Type:         schema.TypeString,
 				Optional:     true,
@@ -116,6 +122,8 @@ func dataStorageDataLakeGen2PathRead(d *schema.ResourceData, meta interface{}) e
 		return err
 	}
 
+	aceFilter := d.Get("ace_scope_filter").(string)
+
 	log.Printf("[INFO] Id Path is: %s", id.Path)
 	log.Printf("[INFO] Id Filesystem is: %s", id.FileSystemName)
 	log.Printf("[INFO] Id Account Name is: %s", id.AccountName)
@@ -159,7 +167,31 @@ func dataStorageDataLakeGen2PathRead(d *schema.ResourceData, meta interface{}) e
 	if err != nil {
 		return fmt.Errorf("Error parsing response ACL %q: %s", resp.ACL, err)
 	}
-	d.Set("ace", FlattenDataLakeGen2AceList(acl))
+
+	flattenedACLs := FlattenDataLakeGen2AceList(acl)
+
+	// If the scope is set to anything other than all, filter out all the unwanted scopes
+	if aceFilter != "all" {
+		log.Printf("[INFO] Filtering ACL's to: %s", aceFilter)
+		flattenedACLs = filterAceByScope(flattenedACLs, aceFilter)
+	}
+
+	d.Set("ace", flattenedACLs)
 
 	return nil
+}
+
+func filterAceByScope(ace []interface{}, scope string) []interface{} {
+	filteredAces := []interface{}{}
+
+	for _, value := range ace {
+		current := value.(map[string]interface{})
+
+		if current["scope"] == scope {
+			filteredAces = append(filteredAces, current)
+		}
+	}
+
+	return filteredAces
+
 }
